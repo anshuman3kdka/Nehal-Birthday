@@ -35,3 +35,15 @@ body {
   66% { transform: translate(-20px, 20px) scale(0.9); }
   100% { transform: translate(0, 0) scale(1); }
 }
+
+.animate-orb-drift {
+  animation: orbDrift 20s infinite alternate linear;
+}
+
+.animate-orb-drift-reverse {
+  animation: orbDrift 25s infinite alternate-reverse linear;
+}
+
+.animate-orb-drift-slow {
+  animation: orbDrift 30s infinite alternate linear;
+}
