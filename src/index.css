@@ -17,3 +17,14 @@ body {
   overflow-x: hidden;
   text-transform: lowercase;
 }
+
+@layer utilities {
+  .text-shadow-sm {
+    text-shadow: 0 0 10px rgba(255, 250, 240, 0.4);
+  }
+}
+
+:root {
+  --mouse-x: 50vw;
+  --mouse-y: 50vh;
+}
