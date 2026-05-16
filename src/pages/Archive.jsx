@@ -2,42 +2,76 @@ import { motion } from 'framer-motion'
 import Confession from '../components/Confession'
 
 const confessions = [
-  {
-    id: 1,
-    title: "first thought",
-    text: "the very first time i saw you, i remember thinking that the rest of the world felt suddenly very quiet."
-  },
-  {
-    id: 2,
-    title: "stolen glances",
-    text: "i used to look for your name in notifications just to feel that tiny rush of adrenaline before opening the message."
-  }
+  { id: 1, title: "first thought", text: "the very first time i saw you, i remember thinking that the rest of the world felt suddenly very quiet." },
+  { id: 2, title: "stolen glances", text: "i used to look for your name in notifications just to feel that tiny rush of adrenaline before opening the message." },
 ]
 
 export default function Archive() {
   return (
-    <div className="flex flex-col px-5 pb-32 pt-7 md:px-8">
-      <header className="flex items-center justify-between text-[11px] tracking-[0.22em] text-[rgba(245,245,247,0.62)]">
-        <p className="font-['Inter']">midnight whispers</p>
-        <p className="font-['Inter']">archive</p>
+    <div className="flex flex-col px-5 pb-36 pt-7 md:px-8 min-h-screen">
+      <header className="flex items-center justify-between text-[11px] tracking-[0.22em] text-[rgba(245,245,247,0.45)]">
+        <motion.p className="font-['Inter']" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.6 }}>
+          midnight whispers
+        </motion.p>
+        <motion.p className="font-['Inter']" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.6 }}>
+          archive
+        </motion.p>
       </header>
 
-      <section className="relative z-10 mt-14 grid gap-8 md:grid-cols-2">
-        {confessions.map((conf, index) => (
-          <Confession key={index} title={conf.title} text={conf.text} />
+      <motion.div
+        className="mt-10 mb-2"
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.1, duration: 0.7 }}
+      >
+        <p className="font-['Inter'] text-[10px] tracking-[0.3em] text-[rgba(242,216,200,0.4)]">hidden confessions</p>
+        <div className="mt-2 h-px w-16 bg-gradient-to-r from-[rgba(141,99,123,0.5)] to-transparent" />
+      </motion.div>
+
+      <section className="relative z-10 mt-4 grid gap-6 md:grid-cols-2">
+        {confessions.map((conf, i) => (
+          <motion.div
+            key={conf.id}
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 + i * 0.15, duration: 0.9, ease: [0.25, 0.1, 0.25, 1] }}
+          >
+            <Confession title={conf.title} text={conf.text} />
+          </motion.div>
         ))}
       </section>
 
-      <section className="relative z-10 mt-14 flex items-center justify-center rounded-[2rem] border border-[rgba(255,250,240,0.12)] bg-[linear-gradient(140deg,rgba(24,20,29,0.5),rgba(10,10,12,0.4))] p-10 min-h-[30vh] shadow-[0_20px_80px_rgba(0,0,0,0.32)] backdrop-blur-md">
+      {/* Reveal instruction zone */}
+      <motion.section
+        className="relative z-10 mt-8 flex flex-col items-center justify-center rounded-[2rem] border border-[rgba(255,250,240,0.08)] p-10 min-h-[28vh] overflow-hidden"
+        style={{ background: 'linear-gradient(140deg, rgba(18,18,26,0.45), rgba(10,10,14,0.35))' }}
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.5, duration: 1 }}
+      >
+        {/* Mask-revealed inner content */}
+        <div
+          className="absolute inset-0 flex items-center justify-center p-10"
+          style={{
+            WebkitMaskImage: 'radial-gradient(280px circle at var(--mouse-x) var(--mouse-y), black 0%, rgba(0,0,0,0.4) 50%, transparent 100%)',
+            maskImage: 'radial-gradient(280px circle at var(--mouse-x) var(--mouse-y), black 0%, rgba(0,0,0,0.4) 50%, transparent 100%)',
+            WebkitMaskAttachment: 'fixed',
+            maskAttachment: 'fixed',
+          }}
+        >
+          <p className="font-['Courier_Prime'] text-base leading-8 text-[rgba(242,216,200,0.9)] text-center max-w-md"
+            style={{ textShadow: '0 0 30px rgba(242,216,200,0.4), 0 0 60px rgba(141,99,123,0.2)' }}>
+            some things are only beautiful when you're close enough to really see them.
+          </p>
+        </div>
+
+        {/* Default dim state */}
         <motion.p
-           className="font-['Courier_Prime'] text-sm tracking-widest text-[rgba(245,245,247,0.3)] text-center max-w-lg leading-relaxed uppercase"
-           initial={{ opacity: 0 }}
-           animate={{ opacity: 1 }}
-           transition={{ delay: 0.2, duration: 1 }}
+          className="font-['Courier_Prime'] text-sm tracking-widest text-[rgba(245,245,247,0.2)] text-center max-w-lg leading-relaxed uppercase"
         >
           use the light to reveal what is hidden in the dark...
         </motion.p>
-      </section>
+      </motion.section>
     </div>
   )
 }
