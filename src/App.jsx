@@ -1,150 +1,101 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
-import { Canvas, useFrame } from '@react-three/fiber'
-import { Float, OrbitControls, Stars } from '@react-three/drei'
-import { EffectComposer, Bloom } from '@react-three/postprocessing'
 import { motion } from 'framer-motion'
-import gsap from 'gsap'
-import Lenis from 'lenis'
-import * as THREE from 'three'
-import { getProject, types } from '@theatre/core'
+const fragments = [
+  {
+    id: 'fragment_001',
+    time: '00:17 am',
+    location: 'quiet corner',
+    text: 'you turned an ordinary night into a place i never wanted to leave.',
+  },
+  {
+    id: 'fragment_002',
+    time: '01:09 am',
+    location: 'city lights',
+    text: 'every small laugh of yours felt louder than the whole skyline.',
+  },
+  {
+    id: 'fragment_003',
+    time: '02:03 am',
+    location: 'homeward',
+    text: 'i kept wishing the road would stretch just to stay next to you longer.',
+  },
+]
 
-const theatreProject = getProject('Nehal Birthday')
-const theatreSheet = theatreProject.sheet('Scene')
-
-function Orb({ speed, y }) {
-  const meshRef = useRef(null)
-
-  useFrame((state, delta) => {
-    if (!meshRef.current) {
-      return
-    }
-
-    meshRef.current.rotation.y += speed * delta
-    meshRef.current.rotation.x += 0.2 * delta
-    meshRef.current.position.y = THREE.MathUtils.lerp(
-      meshRef.current.position.y,
-      y,
-      0.08,
-    )
-    meshRef.current.position.x = Math.sin(state.clock.elapsedTime * 0.5) * 0.25
-  })
-
+function LogFragment({ fragment, index }) {
   return (
-    <Float speed={1.6} floatIntensity={1.4} rotationIntensity={0.3}>
-      <mesh ref={meshRef} castShadow receiveShadow>
-        <icosahedronGeometry args={[1.05, 24]} />
-        <meshStandardMaterial color="#f59e0b" roughness={0.2} metalness={0.65} />
-      </mesh>
-    </Float>
+    <motion.article
+      className="rounded-2xl border border-[rgba(255,250,240,0.15)] bg-[rgba(18,18,26,0.42)] p-5 backdrop-blur-sm"
+      initial={{ opacity: 0, y: 18 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.1 * index, duration: 0.6, ease: 'easeOut' }}
+    >
+      <div className="mb-4 flex items-center justify-between text-[10px] tracking-[0.16em] text-[rgba(245,245,247,0.65)]">
+        <span>{fragment.id}</span>
+        <span>{fragment.time}</span>
+      </div>
+      <p className="font-['Courier_Prime'] text-[15px] leading-7 text-[#f5f5f7]">
+        {fragment.text}
+      </p>
+      <p className="mt-4 text-[11px] tracking-[0.12em] text-[rgba(245,245,247,0.45)]">
+        {fragment.location}
+      </p>
+    </motion.article>
   )
 }
 
 function App() {
-  const headingRef = useRef(null)
-  const [theatreValues, setTheatreValues] = useState({ speed: 0.8, y: 0 })
-  const theatreObject = useMemo(
-    () =>
-      theatreSheet.object('Orb Controls', {
-        speed: types.number(0.8, { range: [0, 2] }),
-        y: types.number(0, { range: [-1, 1] }),
-      }),
-    [],
-  )
-
-  useEffect(() => {
-    if (import.meta.env.DEV) {
-      import('@theatre/studio').then((studio) => {
-        if (!studio.default.__initialized) {
-          studio.default.initialize()
-        }
-      })
-    }
-
-    const unsubscribe = theatreObject.onValuesChange((values) => {
-      setTheatreValues(values)
-    })
-
-    return () => {
-      unsubscribe()
-    }
-  }, [theatreObject])
-
-  useEffect(() => {
-    const lenis = new Lenis({ smoothWheel: true })
-    let rafId = 0
-
-    const raf = (time) => {
-      lenis.raf(time)
-      rafId = requestAnimationFrame(raf)
-    }
-
-    rafId = requestAnimationFrame(raf)
-
-    return () => {
-      cancelAnimationFrame(rafId)
-      lenis.destroy()
-    }
-  }, [])
-
-  useEffect(() => {
-    if (!headingRef.current) {
-      return
-    }
-
-    const animation = gsap.fromTo(
-      headingRef.current,
-      { y: 24, opacity: 0 },
-      { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out' },
-    )
-
-    return () => {
-      animation.kill()
-    }
-  }, [])
-
   return (
-    <main className="min-h-screen bg-slate-950 text-slate-100">
-      <section className="mx-auto flex min-h-screen max-w-6xl flex-col items-center justify-center gap-8 px-6 py-16 text-center">
-        <motion.div
-          className="w-full"
-          initial={{ opacity: 0, scale: 0.96 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.7, ease: 'easeOut' }}
-        >
-          <p className="font-['Special_Elite'] text-sm uppercase tracking-[0.3em] text-amber-300">
-            Nehal Birthday Universe
-          </p>
-          <h1 ref={headingRef} className="mt-4 font-['Inter'] text-4xl font-semibold md:text-6xl">
-            Vite + R3F Motion Stack
-          </h1>
-          <p className="mx-auto mt-4 max-w-2xl font-['Inter'] text-base text-slate-300 md:text-lg">
-            Three.js, React Three Fiber, postprocessing, Framer Motion, GSAP,
-            Lenis, Tailwind CSS, Google Fonts, and Theatre.js are wired together.
-          </p>
-        </motion.div>
+    <main className="min-h-screen bg-[#0A0A0C] text-[#f5f5f7]">
+      <div className="mx-auto flex min-h-screen w-full max-w-6xl flex-col px-5 pb-16 pt-7 md:px-8">
+        <header className="flex items-center justify-between text-[11px] tracking-[0.22em] text-[rgba(245,245,247,0.62)]">
+          <p className="font-['Inter']">midnight whispers</p>
+          <p className="font-['Inter']">private archive</p>
+        </header>
 
-        <div className="h-[420px] w-full overflow-hidden rounded-3xl border border-slate-800 bg-slate-900 shadow-2xl">
-          <Canvas camera={{ position: [0, 0, 4], fov: 50 }} shadows>
-            <color attach="background" args={['#020617']} />
-            <ambientLight intensity={0.3} />
-            <directionalLight position={[3, 2, 4]} intensity={1.5} castShadow />
-            <Stars radius={35} depth={40} count={1400} factor={3} saturation={0} fade speed={0.4} />
-            <Orb speed={theatreValues.speed} y={theatreValues.y} />
-            <EffectComposer>
-              <Bloom intensity={0.9} luminanceThreshold={0.2} mipmapBlur />
-            </EffectComposer>
-            <OrbitControls enablePan={false} enableZoom={false} autoRotate autoRotateSpeed={0.5} />
-          </Canvas>
-        </div>
-      </section>
+        <section className="mt-16">
+          <motion.p
+            className="font-['Inter'] text-[11px] tracking-[0.2em] text-[rgba(245,245,247,0.56)]"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, ease: 'easeOut' }}
+          >
+            entry point: 2:00 am internet
+          </motion.p>
 
-      <section className="mx-auto max-w-3xl px-6 pb-24 text-center">
-        <p className="font-['Inter'] text-slate-400">
-          Scroll to feel Lenis smoothing, hover and drag the 3D object, and tweak
-          values with Theatre Studio in development mode.
-        </p>
-        <div className="mt-16 h-40 rounded-2xl border border-slate-800 bg-slate-900/60" />
-      </section>
+          <motion.h1
+            className="mt-4 max-w-3xl font-['Courier_Prime'] text-3xl leading-tight md:text-5xl"
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.08, duration: 0.6, ease: 'easeOut' }}
+          >
+            a soft place where every memory of you glows in the dark.
+          </motion.h1>
+
+          <motion.p
+            className="mt-6 max-w-2xl font-['Inter'] text-sm leading-7 text-[rgba(245,245,247,0.72)]"
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.16, duration: 0.6, ease: 'easeOut' }}
+          >
+            this is the foundation of your birthday archive: quiet tones, journal
+            fragments, and a hidden layer ready for the searchlight in step two.
+          </motion.p>
+        </section>
+
+        <section className="mt-14 grid gap-4 md:grid-cols-3">
+          {fragments.map((fragment, index) => (
+            <LogFragment key={fragment.id} fragment={fragment} index={index} />
+          ))}
+        </section>
+
+        <section className="mt-10 rounded-3xl border border-[rgba(74,59,99,0.55)] bg-[linear-gradient(140deg,rgba(18,18,26,0.9),rgba(10,10,12,0.8))] p-6">
+          <p className="font-['Inter'] text-[11px] tracking-[0.18em] text-[rgba(255,250,240,0.72)]">
+            hidden confession placeholder
+          </p>
+          <p className="mt-3 max-w-2xl font-['Courier_Prime'] text-[15px] leading-7 text-[rgba(245,245,247,0.62)] blur-[2px]">
+            you are the safest midnight i have ever known.
+          </p>
+        </section>
+      </div>
     </main>
   )
 }
