@@ -14,5 +14,6 @@ body {
   margin: 0;
   background: #0a0a0c;
   min-height: 100vh;
+  overflow-x: hidden;
   text-transform: lowercase;
 }
