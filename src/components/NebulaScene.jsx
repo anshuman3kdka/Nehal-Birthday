@@ -1,143 +1,114 @@
-import { useMemo, useRef, useState } from 'react'
+import { useMemo, useRef } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
-import { Cloud, Sparkles, Stars, Float, PerformanceMonitor } from '@react-three/drei'
+import { Cloud, Sparkles, Stars, Float } from '@react-three/drei'
 import { Bloom, EffectComposer, Vignette, ChromaticAberration } from '@react-three/postprocessing'
 import * as THREE from 'three'
 
 function NebulaRing() {
-  const ringRef = useRef(null)
-
+  const ref = useRef()
   useFrame((state, delta) => {
-    if (ringRef.current) {
-      ringRef.current.rotation.z = (ringRef.current.rotation.z - delta * 0.1) % (Math.PI * 2)
-    }
+    if (!ref.current) return
+    ref.current.rotation.x += delta * 0.015
+    ref.current.rotation.z += delta * 0.008
   })
-
   return (
-    <Float speed={2} rotationIntensity={0.5} floatIntensity={1}>
-      <mesh ref={ringRef} position={[0, 0, -5]} rotation={[Math.PI / 3, 0, 0]}>
-        <torusGeometry args={[3, 0.2, 32, 100]} />
-        <meshStandardMaterial
-          color="#1b1520"
-          emissive="#8d637b"
-          emissiveIntensity={1.5}
-          roughness={0.8}
-          metalness={0.2}
-        />
-      </mesh>
-    </Float>
+    <mesh ref={ref} position={[0, 0, -5]} rotation={[Math.PI / 3, 0, 0]}>
+      <torusGeometry args={[3.5, 0.04, 8, 120]} />
+      <meshStandardMaterial
+        color="#f2d8c8"
+        emissive="#8d637b"
+        emissiveIntensity={1.2}
+        transparent
+        opacity={0.18}
+      />
+    </mesh>
   )
 }
 
-function SceneContent({ isLowPerformance }) {
-  const nebulaRef = useRef(null)
+function SceneContent() {
+  const groupRef = useRef()
 
-  const clouds = useMemo(
-    () => [
-      { position: [-5, 3, -7], scale: 1.35, opacity: 0.26, speed: 0.08, color: '#8d637b' },
-      { position: [5, -2, -8], scale: 1.6, opacity: 0.2, speed: 0.12, color: '#30283d' },
-      { position: [4, 4, -6], scale: 1.1, opacity: 0.16, speed: 0.06, color: '#f2d8c8' },
-      { position: [-4, -3, -5], scale: 1.2, opacity: 0.2, speed: 0.1, color: '#8d637b' }
-    ],
-    [],
-  )
+  const clouds = useMemo(() => [
+    { position: [-5, 3, -7],  scale: 2.2, opacity: 0.28, speed: 0.06, color: '#8d637b' },
+    { position: [5, -2, -8],  scale: 2.8, opacity: 0.22, speed: 0.09, color: '#6b4f75' },
+    { position: [-3, -3, -6], scale: 1.8, opacity: 0.18, speed: 0.07, color: '#f2d8c8' },
+    { position: [4, 4, -9],   scale: 2.0, opacity: 0.15, speed: 0.05, color: '#c49aad' },
+    { position: [0, 1, -10],  scale: 3.0, opacity: 0.12, speed: 0.04, color: '#4a2d55' },
+  ], [])
 
   useFrame((state, delta) => {
-    if (!nebulaRef.current) return
-
-    nebulaRef.current.rotation.z = THREE.MathUtils.lerp(
-      nebulaRef.current.rotation.z,
-      Math.sin(state.clock.elapsedTime * 0.05) * 0.04,
-      delta * 0.6,
-    )
-    nebulaRef.current.rotation.y += delta * 0.02
-    nebulaRef.current.position.y = THREE.MathUtils.lerp(
-      nebulaRef.current.position.y,
-      Math.sin(state.clock.elapsedTime * 0.18) * 0.08,
-      delta * 0.7,
-    )
+    if (!groupRef.current) return
+    groupRef.current.rotation.y += delta * 0.012
+    groupRef.current.rotation.z = Math.sin(state.clock.elapsedTime * 0.06) * 0.03
   })
 
   return (
-    <group ref={nebulaRef}>
-      <ambientLight intensity={0.28} />
-      <directionalLight position={[4, 3, 5]} intensity={1.05} color="#fff4ea" />
-      <pointLight position={[-3, -1, 3]} intensity={9} color="#8d637b" />
-      <pointLight position={[3, 1, 2]} intensity={7} color="#f2d8c8" />
+    <group ref={groupRef}>
+      <ambientLight intensity={0.15} />
+      <directionalLight position={[5, 5, 5]} intensity={0.8} color="#fff4ea" />
+      <pointLight position={[-4, 2, 2]} intensity={18} color="#8d637b" distance={12} decay={2} />
+      <pointLight position={[4, -2, 3]} intensity={14} color="#f2d8c8" distance={10} decay={2} />
+      <pointLight position={[0, 0, 4]} intensity={8}  color="#c49aad" distance={8}  decay={2} />
 
-      <Stars
-        radius={55}
-        depth={24}
-        count={isLowPerformance ? 500 : 1800}
-        factor={2.3}
-        saturation={0}
-        fade
-        speed={0.22}
-      />
+      <Stars radius={80} depth={35} count={1800} factor={2.8} saturation={0.1} fade speed={0.15} />
 
-      <Sparkles
-        count={isLowPerformance ? 40 : 120}
-        scale={[12, 7, 8]}
-        size={1.6}
-        speed={0.12}
-        opacity={0.55}
-        color="#f2d8c8"
-      />
+      <Float speed={0.4} rotationIntensity={0.2} floatIntensity={0.3}>
+        <Sparkles count={120} scale={[20, 12, 10]} size={2.8} speed={0.08} opacity={0.55} color="#f2d8c8" noise={0.4} />
+      </Float>
+      <Sparkles count={60} scale={[15, 8, 8]} size={1.4} speed={0.05} opacity={0.3} color="#8d637b" />
 
-      {clouds.map((cloud, index) => (
+      {clouds.map((cloud, i) => (
         <Cloud
-          key={`${cloud.position.join('-')}-${index}`}
+          key={i}
           position={cloud.position}
           scale={cloud.scale}
           opacity={cloud.opacity}
           speed={cloud.speed}
           color={cloud.color}
-          segments={isLowPerformance ? 12 : 24}
-          bounds={[1.8, 0.8, 0.8]}
-          volume={8}
-          growth={12}
+          segments={20}
+          bounds={[2.5, 1.2, 1.2]}
+          volume={10}
+          growth={15}
         />
       ))}
 
       <NebulaRing />
 
-      <EffectComposer multisampling={isLowPerformance ? 0 : 4}>
-        <Bloom intensity={1.8} luminanceThreshold={0.12} mipmapBlur resolutionScale={isLowPerformance ? 0.5 : 1} />
+      <EffectComposer multisampling={4}>
+        <Bloom intensity={1.8} luminanceThreshold={0.12} luminanceSmoothing={0.6} mipmapBlur radius={0.8} />
         <ChromaticAberration offset={[0.0005, 0.0005]} />
-        <Vignette eskil={false} offset={0.22} darkness={0.7} />
+        <Vignette eskil={false} offset={0.15} darkness={0.85} />
       </EffectComposer>
     </group>
   )
 }
 
 export default function NebulaScene() {
-  const [dpr, setDpr] = useState(1.5)
-  const [isLowPerformance, setIsLowPerformance] = useState(false)
-
   return (
     <div className="pointer-events-none fixed inset-0 overflow-hidden">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(141,99,123,0.24),_transparent_44%),radial-gradient(circle_at_bottom,_rgba(242,216,200,0.08),_transparent_36%)]" />
-
-      <div className="absolute left-[-12%] top-[8%] h-72 w-72 rounded-full bg-[rgba(141,99,123,0.18)] blur-3xl animate-orb-drift" />
-      <div className="absolute right-[-8%] top-[16%] h-80 w-80 rounded-full bg-[rgba(242,216,200,0.12)] blur-3xl animate-orb-drift-reverse" />
-
-      {/* Wrapper to preserve centering layout while child animates transform */}
-      <div className="absolute bottom-[-12%] left-1/2 h-96 w-[32rem] -translate-x-1/2">
-        <div className="h-full w-full rounded-full bg-[rgba(255,255,255,0.04)] blur-3xl animate-orb-drift-slow" />
-      </div>
+      <div className="absolute inset-0" style={{
+        background: `
+          radial-gradient(ellipse 80% 60% at 20% 20%, rgba(141,99,123,0.22) 0%, transparent 60%),
+          radial-gradient(ellipse 60% 50% at 80% 80%, rgba(242,216,200,0.14) 0%, transparent 55%),
+          radial-gradient(ellipse 50% 40% at 60% 10%, rgba(106,79,117,0.18) 0%, transparent 50%),
+          radial-gradient(ellipse 70% 60% at 10% 80%, rgba(196,154,173,0.1)  0%, transparent 55%)
+        `
+      }} />
+      <div className="nebula-orb-1 absolute w-[500px] h-[500px] rounded-full blur-3xl"
+        style={{ background: 'rgba(141,99,123,0.2)', top: '-10%', left: '-5%' }} />
+      <div className="nebula-orb-2 absolute w-[400px] h-[400px] rounded-full blur-3xl"
+        style={{ background: 'rgba(242,216,200,0.12)', bottom: '5%', right: '-5%' }} />
+      <div className="nebula-orb-3 absolute w-[300px] h-[300px] rounded-full blur-3xl"
+        style={{ background: 'rgba(196,154,173,0.15)', top: '40%', right: '15%' }} />
 
       <Canvas
-        camera={{ position: [0, 0, 6], fov: 46 }}
-        dpr={dpr}
-        gl={{ antialias: !isLowPerformance, alpha: true, powerPreference: "high-performance" }}
+        camera={{ position: [0, 0, 7], fov: 52 }}
+        dpr={[1, 2]}
+        gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
         className="!absolute inset-0"
       >
-        <PerformanceMonitor
-          onIncline={() => { setDpr(1.5); setIsLowPerformance(false) }}
-          onDecline={() => { setDpr(1); setIsLowPerformance(true) }}
-        />
-        <color attach="background" args={['#0A0A0C']} />
-        <SceneContent isLowPerformance={isLowPerformance} />
+        <color attach="background" args={['#07070A']} />
+        <SceneContent />
       </Canvas>
     </div>
   )
