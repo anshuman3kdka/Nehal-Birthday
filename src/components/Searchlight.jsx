@@ -9,7 +9,7 @@ export default function Searchlight({ x, y }) {
     <>
       {/* Outer ambient glow */}
       <motion.div
-        className="pointer-events-none fixed top-0 left-0 rounded-full"
+        className="pointer-events-none fixed top-0 left-0 rounded-full hidden md:block"
         style={{
           x: springX,
           y: springY,
@@ -23,7 +23,7 @@ export default function Searchlight({ x, y }) {
       />
       {/* Inner focused beam */}
       <motion.div
-        className="pointer-events-none fixed top-0 left-0 rounded-full mix-blend-screen"
+        className="pointer-events-none fixed top-0 left-0 rounded-full mix-blend-screen hidden md:block"
         style={{
           x: springX,
           y: springY,

@@ -1,8 +1,8 @@
 import { motion } from 'framer-motion'
 
 const fadeUp = (delay = 0) => ({
-  initial: { opacity: 0, y: 28, filter: 'blur(8px)' },
-  animate: { opacity: 1, y: 0, filter: 'blur(0px)' },
+  initial: { opacity: 0, y: 28 },
+  animate: { opacity: 1, y: 0 },
   transition: { delay, duration: 0.9, ease: [0.25, 0.1, 0.25, 1] }
 })
 
@@ -37,8 +37,8 @@ export default function Home() {
                 <motion.span
                   key={i}
                   className="inline-block mr-[0.25em]"
-                  initial={{ opacity: 0, y: 20, filter: 'blur(6px)' }}
-                  animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.4 + i * 0.06, duration: 0.7, ease: [0.25, 0.1, 0.25, 1] }}
                 >
                   {word}
