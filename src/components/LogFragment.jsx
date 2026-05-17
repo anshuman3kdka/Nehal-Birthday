@@ -4,16 +4,16 @@ export default function LogFragment({ fragment, index }) {
   return (
     <motion.article
       className="relative rounded-2xl border border-[rgba(255,250,240,0.1)] bg-[rgba(16,14,22,0.6)] p-6 overflow-hidden glow-card card-shimmer group"
-      initial={{ opacity: 0, y: 30, filter: 'blur(10px)' }}
-      animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+      initial={{ opacity: 0, y: 30 }}
+      animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.15 + index * 0.12, duration: 0.9, ease: [0.25, 0.1, 0.25, 1] }}
       style={{ backdropFilter: 'blur(12px)' }}
     >
       {/* Top accent line that glows on hover */}
-      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[rgba(242,216,200,0.2)] to-transparent transition-all duration-500 group-hover:via-[rgba(242,216,200,0.5)]" />
+      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[rgba(242,216,200,0.2)] to-transparent transition-all duration-500 md:group-hover:via-[rgba(242,216,200,0.5)]" />
 
       {/* Subtle corner glow */}
-      <div className="absolute top-0 right-0 w-24 h-24 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+      <div className="absolute top-0 right-0 w-24 h-24 rounded-full opacity-0 md:group-hover:opacity-100 transition-opacity duration-500"
         style={{ background: 'radial-gradient(circle at 100% 0%, rgba(141,99,123,0.15) 0%, transparent 70%)' }}
       />
 

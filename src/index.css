@@ -169,14 +169,37 @@ body::after {
   100% { transform: translateY(-10vh) translateX(var(--drift-end)) scale(0.5); opacity: 0; }
 }
 
+/* ─── reveal mask ────────────────────────────────────── */
+.reveal-mask {
+  --mask-size: 240px;
+  --mask-radius: calc(var(--mask-size) / 2);
+  mask-image: radial-gradient(var(--mask-radius) circle at center, black 0%, rgba(0,0,0,0.5) 50%, transparent 100%);
+  -webkit-mask-image: radial-gradient(var(--mask-radius) circle at center, black 0%, rgba(0,0,0,0.5) 50%, transparent 100%);
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+  mask-size: var(--mask-size) var(--mask-size);
+  -webkit-mask-size: var(--mask-size) var(--mask-size);
+  mask-position: calc(var(--mouse-x) - var(--mask-radius)) calc(var(--mouse-y) - var(--mask-radius));
+  -webkit-mask-position: calc(var(--mouse-x) - var(--mask-radius)) calc(var(--mouse-y) - var(--mask-radius));
+  will-change: mask-position, -webkit-mask-position;
+}
+
+@media (min-width: 768px) {
+  .reveal-mask {
+    --mask-size: 480px;
+  }
+}
+
 /* ─── card hover glow ────────────────────────────────── */
 .glow-card {
   transition: border-color 0.4s ease, box-shadow 0.4s ease, transform 0.4s ease;
 }
-.glow-card:hover {
-  border-color: rgba(242,216,200,0.22) !important;
-  box-shadow: 0 0 30px rgba(141,99,123,0.2), 0 0 60px rgba(141,99,123,0.08), inset 0 0 30px rgba(141,99,123,0.05);
-  transform: translateY(-3px);
+@media (hover: hover) and (pointer: fine) {
+  .glow-card:hover {
+    border-color: rgba(242,216,200,0.22) !important;
+    box-shadow: 0 0 30px rgba(141,99,123,0.2), 0 0 60px rgba(141,99,123,0.08), inset 0 0 30px rgba(141,99,123,0.05);
+    transform: translateY(-3px);
+  }
 }
 
 /* ─── scrollbar ──────────────────────────────────────── */
