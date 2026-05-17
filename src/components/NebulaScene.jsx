@@ -1,5 +1,5 @@
 import { useMemo, useRef } from 'react'
-import { Canvas, useFrame } from '@react-three/fiber'
+import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { Cloud, Sparkles, Stars, Float } from '@react-three/drei'
 import { Bloom, EffectComposer, Vignette, ChromaticAberration } from '@react-three/postprocessing'
 
@@ -26,13 +26,13 @@ function NebulaRing() {
 
 function SceneContent() {
   const groupRef = useRef()
+  const { size } = useThree()
+  const isMobile = size.width < 768
 
   const clouds = useMemo(() => [
     { position: [-5, 3, -7], scale: 2.2, opacity: 0.28, speed: 0.06, color: '#8d637b' },
     { position: [5, -2, -8], scale: 2.8, opacity: 0.22, speed: 0.09, color: '#6b4f75' },
     { position: [-3, -3, -6], scale: 1.8, opacity: 0.18, speed: 0.07, color: '#f2d8c8' },
-    { position: [4, 4, -9], scale: 2.0, opacity: 0.15, speed: 0.05, color: '#c49aad' },
-    { position: [0, 1, -10], scale: 3.0, opacity: 0.12, speed: 0.04, color: '#4a2d55' },
   ], [])
 
   useFrame((state, delta) => {
@@ -49,12 +49,12 @@ function SceneContent() {
       <pointLight position={[4, -2, 3]} intensity={14} color="#f2d8c8" distance={10} decay={2} />
       <pointLight position={[0, 0, 4]} intensity={8} color="#c49aad" distance={8} decay={2} />
 
-      <Stars radius={80} depth={35} count={1800} factor={2.8} saturation={0.1} fade speed={0.15} />
+      <Stars radius={80} depth={35} count={800} factor={2.8} saturation={0.1} fade speed={0.15} />
 
       <Float speed={0.4} rotationIntensity={0.2} floatIntensity={0.3}>
-        <Sparkles count={120} scale={[20, 12, 10]} size={2.8} speed={0.08} opacity={0.55} color="#f2d8c8" noise={0.4} />
+        <Sparkles count={40} scale={[20, 12, 10]} size={2.8} speed={0.08} opacity={0.55} color="#f2d8c8" noise={0.4} />
       </Float>
-      <Sparkles count={60} scale={[15, 8, 8]} size={1.4} speed={0.05} opacity={0.3} color="#8d637b" />
+      <Sparkles count={20} scale={[15, 8, 8]} size={1.4} speed={0.05} opacity={0.3} color="#8d637b" />
 
       {clouds.map((cloud, i) => (
         <Cloud
@@ -73,9 +73,9 @@ function SceneContent() {
 
       <NebulaRing />
 
-      <EffectComposer multisampling={4}>
+      <EffectComposer multisampling={0}>
         <Bloom intensity={1.8} luminanceThreshold={0.12} luminanceSmoothing={0.6} mipmapBlur radius={0.8} />
-        <ChromaticAberration offset={[0.0005, 0.0005]} />
+        {!isMobile && <ChromaticAberration offset={[0.0005, 0.0005]} />}
         <Vignette eskil={false} offset={0.15} darkness={0.85} />
       </EffectComposer>
     </group>
@@ -102,7 +102,7 @@ export default function NebulaScene() {
 
       <Canvas
         camera={{ position: [0, 0, 7], fov: 52 }}
-        dpr={[1, 2]}
+        dpr={[1, 1.25]}
         gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
         className="!absolute inset-0"
       >
