@@ -23,6 +23,7 @@ body {
   min-height: 100vh;
   overflow-x: hidden;
   text-transform: lowercase;
+  touch-action: none; /* Disable touch scroll to allow finger dragging for reveal */
 }
 
 @media (pointer: fine) {
