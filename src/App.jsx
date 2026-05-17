@@ -9,26 +9,11 @@ import Journal from './pages/Journal'
 import Archive from './pages/Archive'
 
 /* ── Custom Cursor ─────────────────────────────────────── */
-function CustomCursor() {
-  const x = useMotionValue(-100)
-  const y = useMotionValue(-100)
+function CustomCursor({ x, y }) {
   const ringX = useSpring(x, { damping: 28, stiffness: 90 })
   const ringY = useSpring(y, { damping: 28, stiffness: 90 })
   const glowX = useSpring(x, { damping: 40, stiffness: 60 })
   const glowY = useSpring(y, { damping: 40, stiffness: 60 })
-
-  useEffect(() => {
-    const move = (e) => {
-      const cx = e.clientX ?? e.touches?.[0]?.clientX
-      const cy = e.clientY ?? e.touches?.[0]?.clientY
-      if (cx !== undefined) {
-        x.set(cx); y.set(cy)
-      }
-    }
-    window.addEventListener('mousemove', move)
-    window.addEventListener('touchmove', move, { passive: true })
-    return () => { window.removeEventListener('mousemove', move); window.removeEventListener('touchmove', move) }
-  }, [x, y])
 
   return (
     <div className="custom-cursor fixed top-0 left-0 pointer-events-none hidden md:block" style={{ zIndex: 9999 }}>
@@ -145,29 +130,41 @@ function GlobalNav() {
 }
 
 function AppInner() {
+  const x = useMotionValue(typeof window !== 'undefined' ? window.innerWidth / 2 : 0)
+  const y = useMotionValue(typeof window !== 'undefined' ? window.innerHeight / 2 : 0)
+
   useEffect(() => {
+    let animationFrameId
     const updateMouse = (e) => {
       const cx = e.clientX ?? e.touches?.[0]?.clientX
       const cy = e.clientY ?? e.touches?.[0]?.clientY
+
       if (cx !== undefined) {
-        document.documentElement.style.setProperty('--mouse-x', `${cx}px`)
-        document.documentElement.style.setProperty('--mouse-y', `${cy}px`)
+        if (animationFrameId) {
+          cancelAnimationFrame(animationFrameId)
+        }
+        animationFrameId = requestAnimationFrame(() => {
+          x.set(cx)
+          y.set(cy)
+          document.documentElement.style.setProperty('--mouse-x', `${cx}px`)
+          document.documentElement.style.setProperty('--mouse-y', `${cy}px`)
+        })
       }
     }
-    window.addEventListener('mousemove', updateMouse)
-    window.addEventListener('touchmove', updateMouse, { passive: true })
+
+    window.addEventListener('pointermove', updateMouse, { passive: true })
     return () => {
-      window.removeEventListener('mousemove', updateMouse)
-      window.removeEventListener('touchmove', updateMouse)
+      window.removeEventListener('pointermove', updateMouse)
+      if (animationFrameId) cancelAnimationFrame(animationFrameId)
     }
-  }, [])
+  }, [x, y])
 
   return (
     <>
       <NebulaScene />
       <FloatingParticles />
-      <CustomCursor />
-      <Searchlight />
+      <CustomCursor x={x} y={y} />
+      <Searchlight x={x} y={y} />
 
       <div className="relative z-10 mx-auto flex min-h-screen w-full flex-col">
         <PageTransition>
