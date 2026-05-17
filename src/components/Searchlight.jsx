@@ -1,26 +1,9 @@
-import { useEffect } from 'react'
-import { motion, useSpring, useMotionValue } from 'framer-motion'
+import { motion, useSpring } from 'framer-motion'
 
-export default function Searchlight() {
-  const x = useMotionValue(typeof window !== 'undefined' ? window.innerWidth / 2 : 0)
-  const y = useMotionValue(typeof window !== 'undefined' ? window.innerHeight / 2 : 0)
-
+export default function Searchlight({ x, y }) {
   const springCfg = { damping: 30, stiffness: 100, mass: 0.8 }
   const springX = useSpring(x, springCfg)
   const springY = useSpring(y, springCfg)
-
-  useEffect(() => {
-    const move = (e) => {
-      const cx = e.clientX ?? e.touches?.[0]?.clientX
-      const cy = e.clientY ?? e.touches?.[0]?.clientY
-      if (cx !== undefined) {
-        x.set(cx); y.set(cy)
-      }
-    }
-    window.addEventListener('mousemove', move)
-    window.addEventListener('touchmove', move, { passive: true })
-    return () => { window.removeEventListener('mousemove', move); window.removeEventListener('touchmove', move) }
-  }, [x, y])
 
   return (
     <>
