@@ -1,0 +1,4 @@
+
+## 2024-05-18 - Framer Motion Layout Reflow vs GPU Transforms
+**Learning:** When animating a continuous pointer-following cursor in React with Framer Motion, passing values to standard layout properties (like `style={{ left: x, top: y }}`) causes the browser to perform a layout recalculation and CPU reflow on every frame. Framer Motion overrides inline `transform` properties when utilizing `x` and `y`.
+**Action:** Always animate `x` and `y` directly instead of `left` and `top`. If the element relied on `transform: translate(-50%, -50%)` for centering, replace it with negative margins (e.g., `margin-top: -[height/2]px; margin-left: -[width/2]px`) to ensure Framer Motion's `transform: translateX(...) translateY(...)` doesn't conflict or overwrite the centering logic. This simple swap offloads the animation to the GPU, significantly reducing main-thread blocking.
