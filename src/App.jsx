@@ -88,32 +88,6 @@ function PageTransition({ children }) {
   )
 }
 
-/* ── Scroll Controls ───────────────────────────────────── */
-function ScrollControls() {
-  const handleScroll = (amount) => {
-    window.scrollBy({ top: amount, behavior: 'smooth' })
-  }
-
-  return (
-    <div className="fixed right-4 bottom-24 z-50 flex flex-col gap-3 md:hidden">
-      <button
-        onClick={() => handleScroll(-300)}
-        className="w-12 h-12 rounded-full border border-[rgba(255,250,240,0.1)] bg-[rgba(10,10,14,0.7)] backdrop-blur-md flex items-center justify-center text-[#f2d8c8] shadow-[0_4px_20px_rgba(0,0,0,0.5)] active:scale-95 transition-transform"
-        aria-label="Scroll Up"
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m18 15-6-6-6 6"/></svg>
-      </button>
-      <button
-        onClick={() => handleScroll(300)}
-        className="w-12 h-12 rounded-full border border-[rgba(255,250,240,0.1)] bg-[rgba(10,10,14,0.7)] backdrop-blur-md flex items-center justify-center text-[#f2d8c8] shadow-[0_4px_20px_rgba(0,0,0,0.5)] active:scale-95 transition-transform"
-        aria-label="Scroll Down"
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6"/></svg>
-      </button>
-    </div>
-  )
-}
-
 /* ── Nav ───────────────────────────────────────────────── */
 function GlobalNav() {
   const location = useLocation()
@@ -203,7 +177,6 @@ function AppInner() {
       </div>
 
       <GlobalNav />
-      <ScrollControls />
     </>
   )
 }

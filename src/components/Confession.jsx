@@ -12,8 +12,8 @@ export default function Confession({ title, text }) {
       {/* Top shimmer line */}
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[rgba(242,216,200,0.2)] to-transparent" />
 
-      {/* Blurred Base State */}
-      <div className="transition-all duration-700 group-hover:opacity-0 select-none" style={{ filter: 'blur(6px)', opacity: 0.35, transform: 'translateZ(0)', willChange: 'opacity' }}>
+      {/* Blurred Base State (Always visible, sharp text is layered on top via mask) */}
+      <div className="select-none" style={{ filter: 'blur(6px)', opacity: 0.35, transform: 'translateZ(0)' }}>
         <h3 className="font-['Inter'] text-[11px] tracking-[0.22em] text-[rgba(255,250,240,0.72)] mb-4">{title}</h3>
         <p className="font-['Courier_Prime'] text-lg leading-relaxed text-[#f5f5f7]">{text}</p>
       </div>
