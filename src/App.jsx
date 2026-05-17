@@ -114,6 +114,7 @@ function GlobalNav() {
 
   return (
     <motion.nav
+      aria-label="Main Navigation"
       className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 flex gap-1 rounded-full border border-[rgba(255,250,240,0.1)] bg-[rgba(10,10,14,0.7)] px-2 py-2 backdrop-blur-2xl shadow-[0_10px_60px_rgba(0,0,0,0.6),0_0_30px_rgba(141,99,123,0.1)]"
       initial={{ y: 60, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
@@ -125,7 +126,8 @@ function GlobalNav() {
           <Link
             key={to}
             to={to}
-            className="relative px-5 py-2 rounded-full transition-colors duration-300"
+            aria-current={active ? 'page' : undefined}
+            className={`relative px-5 py-2 rounded-full transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(242,216,200,0.5)] ${!active ? 'hover:text-[rgba(245,245,247,0.85)]' : ''}`}
             style={{ color: active ? '#f2d8c8' : 'rgba(245,245,247,0.5)' }}
           >
             {active && (
