@@ -4,12 +4,7 @@ import { chromium } from 'playwright';
   const browser = await chromium.launch();
   const page = await browser.newPage();
   await page.goto('http://localhost:5173');
-
-  // Wait for content to be visible
-  await page.waitForSelector('main');
-
-  // Take a screenshot
-  await page.screenshot({ path: 'verification/final_home.png', fullPage: true });
-
+  await page.waitForTimeout(1000); // Wait for animations
+  await page.screenshot({ path: '/home/jules/verification/verification_final.png' });
   await browser.close();
 })();
