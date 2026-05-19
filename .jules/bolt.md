@@ -1,0 +1,3 @@
+## 2024-05-19 - [Framer Motion GPU Acceleration]
+**Learning:** Animating `left`/`top` CSS properties continuously on every pointer move forces expensive CPU-bound layout recalculations on every frame, which can severely degrade performance. Framer Motion can translate `x`/`y` properties into GPU-accelerated `transform`s, but it overrides inline `transform` values. Thus, previously used `transform: translate(-50%, -50%)` logic for centering must be replaced with negative margins matching half the width/height of the element.
+**Action:** Always animate `x` and `y` instead of `left` and `top` for continuous animations (like custom cursors) and use negative margins for offsets to prevent Framer Motion from overriding necessary positioning CSS.
