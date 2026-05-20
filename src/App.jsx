@@ -15,11 +15,14 @@ function CustomCursor({ x, y }) {
   const glowX = useSpring(x, { damping: 40, stiffness: 60 })
   const glowY = useSpring(y, { damping: 40, stiffness: 60 })
 
+  // ⚡ Bolt Performance Optimization:
+  // Use Framer Motion's `x` and `y` for GPU-accelerated transforms instead of `left` and `top`
+  // which trigger continuous CPU layout recalculations and repaints.
   return (
     <div className="custom-cursor fixed top-0 left-0 pointer-events-none hidden md:block" style={{ zIndex: 9999 }}>
-      <motion.div className="cursor-dot" style={{ left: x, top: y }} />
-      <motion.div className="cursor-ring" style={{ left: ringX, top: ringY }} />
-      <motion.div className="cursor-glow" style={{ left: glowX, top: glowY }} />
+      <motion.div className="cursor-dot" style={{ x, y }} />
+      <motion.div className="cursor-ring" style={{ x: ringX, y: ringY }} />
+      <motion.div className="cursor-glow" style={{ x: glowX, y: glowY }} />
     </div>
   )
 }
