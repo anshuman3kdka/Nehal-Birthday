@@ -1,0 +1,3 @@
+## 2024-05-18 - Keyboard Navigation Enhancements
+**Learning:** Animated, custom navigation elements and floating controls without native focus rings make keyboard accessibility extremely difficult, as standard tab focus is hidden.
+**Action:** Always verify keyboard focus states (`focus-visible`) are prominent on interactive elements, especially custom-styled `div` wrappers acting as buttons or interactive components, and standard elements like `<Link>` or `<button>`.
