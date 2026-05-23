@@ -1,0 +1,5 @@
+## 2026-05-23 - GPU-Accelerated Cursor Animations
+
+**Learning:** Framer Motion animating layout properties like `left` and `top` continuously forces CPU-bound layout recalculations per frame, hurting performance. When switching to `x` and `y` for GPU acceleration, it's crucial to understand that Framer Motion overrides inline CSS `transform` properties. Thus, techniques like `transform: translate(-50%, -50%)` for centering won't work in tandem with `x` / `y` properties.
+
+**Action:** When animating element positions continuously (like custom cursors) with Framer Motion, use `x` and `y` for GPU transforms instead of `left` and `top`. Ensure centering offsets use negative margins (`margin-top`/`margin-left`) instead of `transform: translate(-50%, -50%)` to avoid conflicts with Framer Motion's inline transform management.
