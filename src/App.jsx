@@ -110,8 +110,9 @@ function GlobalNav() {
           <Link
             key={to}
             to={to}
-            className="relative px-5 py-2 rounded-full transition-colors duration-300"
+            className="relative px-5 py-2 rounded-full transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(141,99,123,0.5)]"
             style={{ color: active ? '#f2d8c8' : 'rgba(245,245,247,0.5)' }}
+            aria-current={active ? "page" : undefined}
           >
             {active && (
               <motion.div
