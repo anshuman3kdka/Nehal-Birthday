@@ -1,3 +1,3 @@
-## 2025-02-12 - Custom Cursor Performance Fix
+## 2026-05-28 - Custom Cursor Performance Fix
 **Learning:** Animating custom cursors or similar high-frequency elements using inline CSS properties like `left` and `top` leads to significant performance degradation due to CPU-bound layout recalculations (thrashing) on every frame. Framer Motion overrides the standard inline `transform`, requiring the use of its `x` and `y` props.
 **Action:** Always use GPU-accelerated transforms (`x` and `y` in Framer Motion) for continuous high-frequency position animations. When doing so, use negative margins (`margin-left`, `margin-top`) rather than `transform: translate(-50%, -50%)` to handle element centering offsets, preventing conflicts with Framer Motion.
