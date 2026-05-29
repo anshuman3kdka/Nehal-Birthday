@@ -1,0 +1,3 @@
+## 2024-05-29 - Framer Motion CSS Transform Override and GPU Acceleration
+**Learning:** When animating element positions continuously with Framer Motion (e.g., custom cursors), Framer Motion overrides the inline CSS `transform` property. Using CPU-bound layout properties like `left` and `top` leads to unnecessary layout recalculations and degraded performance.
+**Action:** Use `x` and `y` properties to leverage GPU transforms instead of `left` and `top`. Because the `transform` property is overridden, use negative margins (`margin-left` and `margin-top`) for centering offsets instead of `transform: translate(-50%, -50%)`.
