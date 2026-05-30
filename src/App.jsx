@@ -17,9 +17,9 @@ function CustomCursor({ x, y }) {
 
   return (
     <div className="custom-cursor fixed top-0 left-0 pointer-events-none hidden md:block" style={{ zIndex: 9999 }}>
-      <motion.div className="cursor-dot" style={{ left: x, top: y }} />
-      <motion.div className="cursor-ring" style={{ left: ringX, top: ringY }} />
-      <motion.div className="cursor-glow" style={{ left: glowX, top: glowY }} />
+      <motion.div className="cursor-dot" style={{ x, y }} />
+      <motion.div className="cursor-ring" style={{ x: ringX, y: ringY }} />
+      <motion.div className="cursor-glow" style={{ x: glowX, y: glowY }} />
     </div>
   )
 }
