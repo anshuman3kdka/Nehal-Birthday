@@ -1,0 +1,3 @@
+## 2023-10-27 - Framer Motion LayoutId Accessibility
+**Learning:** Animated interactive elements (like Framer Motion layoutId pills in navigation) often lack semantic HTML meaning. It is crucial to pair them with standard HTML accessibility attributes such as `aria-current="page"` for screen readers and visible focus states (e.g., `focus-visible:ring-2`) for keyboard users.
+**Action:** Always ensure custom animated links or buttons retain native web accessibility features. Add `aria-current` to indicate active navigation states and `focus-visible` utility classes to ensure keyboard focus is clear without breaking mouse interactions.
